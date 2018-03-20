@@ -130,7 +130,7 @@ $('#signUpButton').on('click', function() {
                  
                 
                   if ($('#rememberMe').is(':checked')) {
-                        setCookie("token",loginToken,20);
+                        setCookie("token",loginToken,7);
 
                   }
                     
@@ -180,13 +180,7 @@ function AutoLogin(loginToken){
                 
                 $("#login_user").text("Welcome, " + currentUser.username + "!");
                 
-                if ($('#rememberMe').is(':checked')){ 
-
-                    setCookie("token", loginToken, 7);
-
-                }
-
-                    toggleLoginLogoffItems(true);
+                toggleLoginLogoffItems(true);
                 $("#homeNavItem").click();
              } catch (ex) {
                         alert(ex);
