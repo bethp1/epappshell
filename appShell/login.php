@@ -17,8 +17,8 @@ $hash = md5($password);
 
 if($rememberToken > 1 ) {
 
-    $query = "UPDATE users SET remember_token = :loginToken WHERE username = :username";
-    $query_params = array(':loginToken' => $rememberToken, ':username' => $username ); 
+    $query = "UPDATE users SET remember_token = :loginToken WHERE username = :username OR email = :email";
+    $query_params = array(':loginToken' => $rememberToken, ':username' => $username, ':email'=> $email ); 
     
     try { 
 		$stmt = $db->prepare($query); 
