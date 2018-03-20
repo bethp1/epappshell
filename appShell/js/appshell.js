@@ -2,13 +2,21 @@
 var currentUser = null;
 
 $(document).ready(function() {
-    toggleLoginLogoffItems(false);
+    
+    if(getCookie('token')) {
+
+        AutoLogin(getCookie('token'));
+    }else{
+
+        toggleLoginLogoffItems(false);
+    }
 
     $("#loginPageSignUpLink").on("click",function(){
 
             $("#signupNavItem").click();
     });
 });
+
 
 
 function toggleLoginLogoffItems(loggedin) {
@@ -90,9 +98,14 @@ $('#signUpButton').on('click', function() {
 
  $('#login_submit').on('click', function()
 {
-    if ($('#rememberMe').is(':checked')) 
+
+    var loginToken = generateRandomToken(2);
+
+    if ($('#rememberMe').is(':checked')) {
 
         var loginToken = generateRandomToken(20);
+
+    }
        
     $.ajax({
         url: 'login.php',
@@ -115,9 +128,11 @@ $('#signUpButton').on('click', function() {
                   $("#username").val("");
                   $("#pwd").val("");
                  
-                  
-                  if ($('#rememberMe').is(':checked')) 
+                
+                  if ($('#rememberMe').is(':checked')) {
                         setCookie("token",loginToken,20);
+
+                  }
                     
                  $("#login_user").text("Welcome, " + currentUser.username + "!");
                 
@@ -141,29 +156,18 @@ $('#signUpButton').on('click', function() {
 
 });
 
-$(document).ready(function() {
 
-    if(getCookie('token')) {
-
-        AutoLogin(getCookie('token'));
-    }else{
-
-        toggleLoginLogoffItems(false);
-    }
-
-
-});
 
 function AutoLogin(loginToken){
 
-
-
     $.ajax({
 
-       url: 'autoLogin.php',
+        url: 'autoLogin.php',
         type: 'POST',
         data: {
 
+                
+               
                 loginRememberToken: loginToken
              },
         datatype: 'html',
@@ -174,15 +178,13 @@ function AutoLogin(loginToken){
                //alert("success");
                 currentUser = data.user[0]; // set the currentUser to the global variable
                 
-                
-               
-                $("#username").val("");
-                $("#pwd").val("");
                 $("#login_user").text("Welcome, " + currentUser.username + "!");
                 
-                if ($('#rememberMe').is(':checked')) 
+                if ($('#rememberMe').is(':checked')){ 
 
                     setCookie("token", loginToken, 7);
+
+                }
 
                     toggleLoginLogoffItems(true);
                 $("#homeNavItem").click();
@@ -336,7 +338,7 @@ function setCookie(cookieName, cookievalue, exdays) {
     var expires = "expires=" + d.toGMTString();
     document.cookie = cookieName+ "=" + cookievalue+ "; " + expires;
 
-    alert("remember me");
+    
 }
  
 
